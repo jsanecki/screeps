@@ -8,7 +8,8 @@ const TYPES = {
     "COLLECT":"collector",
     "RECHARGE": "recharger",
     "BUILD": "builder",
-    "HARVEST": "harvester"
+    "HARVEST": "harvester",
+    "UPGRADE": "upgrader"
 }
 
 var dispatcher = {
@@ -28,23 +29,27 @@ var dispatcher = {
                 if(creep.memory.role == TYPES.HARVEST) {
                     roleHarvester.run(creep);   
                 }
-                if(creep.memory.role == 'builder') {
+                if(creep.memory.role == TYPES.BUILD) {
                    roleBuilder.run(creep);
                 }
-                if(creep.memory.role == 'upgrader') {
+                if(creep.memory.role == TYPES.UPGRADE) {
                     roleUpgrader.run(creep);
                 }
             } else {
                 //console.log('Dispatching');
-                if(creep.carry.energy < creep.carryCapacity) {
-                    console.log(`dispatching ${ creep.name } to collect`);
+                //console.log(`Sites Detected ${Object.keys(creep.room.find(FIND_CONSTRUCTION_SITES)).length}`);
+                if(creep.carry.energy < (creep.carryCapacity * .2)) {
+                    console.log(`Dispatching ${ creep.name } to Collect Energy`);
                     creep.memory.role = TYPES.COLLECT;
                 } else {
-                    if(Game.spawns['Mojotanus'].energy < Game.spawns['Mojotanus'].energyCapacity) {
-                        console.log(`Dispatching ${ creep.name } to recharge`);
+                    if(creep.room.energyAvailable < creep.room.energyCapacityAvailable) {
+                        console.log(`Dispatching ${ creep.name } to Recharge Spawners`);
                         creep.memory.role = TYPES.RECHARGE;
+                    } else if(0 < Object.keys(creep.room.find(FIND_CONSTRUCTION_SITES)).length) {
+                        console.log(`Dispatching ${ creep.name } to Builder`);
+                        creep.memory.role = TYPES.BUILD;
                     } else {
-                        console.log(`Dispatching ${ creep.name } to build`);
+                        console.log(`Dispatching ${ creep.name } to Upgrade`);
                         creep.memory.role = 'upgrader';
                     }
                 }

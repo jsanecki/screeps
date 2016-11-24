@@ -10,7 +10,7 @@ var roleHarvester = {
         
         if(creep.harvest(sources[creep.memory.sourceIndex]) == ERR_NOT_IN_RANGE) {
             creep.moveTo(sources[creep.memory.sourceIndex]);
-            creep.say(`seeking ${creep.memory.sourceIndex}`);
+            //creep.say(`seeking ${creep.memory.sourceIndex}`);
         } else {
             creep.say(creep.carry.energy + '/' + creep.carryCapacity);
         }

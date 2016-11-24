@@ -1,17 +1,18 @@
 var orderWorkers = {
  
-    buildWorker: function() {
-        var newName = Game.spawns['Mojotanus'].createCreep([WORK,CARRY,MOVE,MOVE], undefined, {});
-        //console.log('Spawning new heavy (250) harvester: ' + newName);
-    },
-    calcAvaliableEnergy: function() {
-        var spawners = creep.room.find(FIND_STRUCTURES, {
-            filter: (structure) => {
-                return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN);
+    buildCreep: function() {
+        if(Object.keys(Game.creeps).length < 8) {
+            var name = this.collector();
+            if(name != ERR_NOT_ENOUGH_ENERGY){
+                console.log(`Creating Creep ${name}`);
             }
-        });
-        
-        return 0;
+        }
+    },
+    collector: function() {
+        return Game.spawns['Mojotanus'].createCreep([WORK,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE], undefined, { 'function': 'worker'});
+    },
+    basic: function() {
+        return Game.spawns['Mojotanus'].createCreep([WORK,CARRY,MOVE,MOVE], undefined, { 'function': 'worker'});
     }
 }
 

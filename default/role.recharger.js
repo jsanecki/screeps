@@ -9,7 +9,6 @@ var roleRecharger = {
         });
         if(targets.length > 0) {
             if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.say(`${targets[0].name}`);
                 creep.moveTo(targets[0]);
             } 
         } else {

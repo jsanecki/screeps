@@ -24,7 +24,7 @@ module.exports.loop = function () {
     //     }
     // } 
     
-    orderWorkers.buildWorker();
+    orderWorkers.buildCreep();
 
     dispatcher.orderCreeps();
 }
