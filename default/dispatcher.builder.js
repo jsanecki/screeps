@@ -1,20 +1,23 @@
-var roleCollector = require('role.collector');
-var roleUpgrader = require('role.upgrader');
-var roleBuilder = require('role.builder');
-var roleRecharge = require('role.recharger');
+var behavior = require('creep.behavior');
 
-const LOUD_CREEPS = true;
-const TYPES = {
-    "COLLECT":"collector",
-    "RECHARGE": "recharger",
-    "BUILD": "builder",
-    "HARVEST": "harvester",
-    "UPGRADE": "upgrader"
-}
+const TYPES = behavior.TYPES();
 
 var dispatcher = {
     
-    orderCreeps() {
+    calNumberOfUpgraders: function() {
+        let count = 0
+        for(var name in Game.creeps) {
+            var creep = Game.creeps[name];
+            if(creep.memory.role == TYPES.UPGRADE) {
+                count++;
+            }
+        }
+        return count;
+    },
+    orderCreeps: function() {
+        let upgraderCount = this.calNumberOfUpgraders();
+        //console.log(`Count of Upgraders is at ${upgraderCount}`);
+        
         for(var name in Game.creeps) {
             var creep = Game.creeps[name];
             
@@ -28,12 +31,15 @@ var dispatcher = {
                     if(creep.room.energyAvailable < creep.room.energyCapacityAvailable) {
                         console.log(`Dispatching ${ creep.name } to Recharge Spawners`);
                         creep.memory.role = TYPES.RECHARGE;
+                    } else if (upgraderCount < 1) {
+                        console.log(`Dispatching ${ creep.name } to Upgrade`);
+                        creep.memory.role = TYPES.UPGRADE;
                     } else if(0 < Object.keys(creep.room.find(FIND_CONSTRUCTION_SITES)).length) {
                         console.log(`Dispatching ${ creep.name } to Builder`);
                         creep.memory.role = TYPES.BUILD;
                     } else {
-                        console.log(`Dispatching ${ creep.name } to Upgrade`);
-                        creep.memory.role = 'upgrader';
+                        console.log(`Nothing to do so Dispatching ${ creep.name } to Upgrade`);
+                        creep.memory.role = TYPES.UPGRADE;
                     }
                 }
             }
