@@ -1,10 +1,8 @@
-var roleHarvester = require('role.harvester');
-var roleUpgrader = require('role.upgrader');
-var roleBuilder = require('role.builder');
 var orderWorkers = require('order.workers');
 var dispatcher = require('dispatcher.builder');
+var behavior = require('creep.behavior');
 
-var SPAWN_NAME = 'Mojotanus';
+var SPAWN_NAME = 'core1';
 
 module.exports.loop = function () {
 
@@ -27,4 +25,6 @@ module.exports.loop = function () {
     orderWorkers.buildCreep();
 
     dispatcher.orderCreeps();
+    
+    behavior.run();
 }

@@ -1,4 +1,4 @@
-var roleHarvester = require('role.harvester');
+var roleCollector = require('role.collector');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleRecharge = require('role.recharger');
@@ -18,24 +18,7 @@ var dispatcher = {
         for(var name in Game.creeps) {
             var creep = Game.creeps[name];
             
-            if(creep.memory.role) {
-                //console.log(`Processing ${creep.memory.role}`);
-                if(creep.memory.role == TYPES.COLLECT) {
-                    roleHarvester.run(creep);
-                }
-                if(creep.memory.role == TYPES.RECHARGE) {
-                    roleRecharge.run(creep);
-                }
-                if(creep.memory.role == TYPES.HARVEST) {
-                    roleHarvester.run(creep);   
-                }
-                if(creep.memory.role == TYPES.BUILD) {
-                   roleBuilder.run(creep);
-                }
-                if(creep.memory.role == TYPES.UPGRADE) {
-                    roleUpgrader.run(creep);
-                }
-            } else {
+            if(!creep.memory.role) {
                 //console.log('Dispatching');
                 //console.log(`Sites Detected ${Object.keys(creep.room.find(FIND_CONSTRUCTION_SITES)).length}`);
                 if(creep.carry.energy < (creep.carryCapacity * .2)) {
@@ -58,4 +41,4 @@ var dispatcher = {
     }
 }
 
-module.exports = dispatcher
+module.exports = dispatcher;
