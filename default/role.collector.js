@@ -2,10 +2,13 @@ var roleCollector = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
+        
+        //TODO make a function to calculate slots for draining energy
+        var sourceSlots = [0,0,0,1];
         var sources = creep.room.find(FIND_SOURCES);
         
         if(creep.memory.sourceIndex == undefined ) {
-            creep.memory.sourceIndex = Math.floor(Math.random() * 2);
+            creep.memory.sourceIndex = sourceSlots[Math.floor(Math.random() * 4)];
         }
         
         if(creep.harvest(sources[creep.memory.sourceIndex]) == ERR_NOT_IN_RANGE) {
