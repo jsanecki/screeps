@@ -1,14 +1,3 @@
-const LIMB_COSTS = {
-  "WORK": 100,
-  "CARRY": 50,
-  "MOVE": 50,
-  "ATTACK": 80,
-  "RANGED_ATTACK": 150,
-  "HEAL": 250,
-  "CLAIM": 600,
-  "TOUGH": 10
-};
-
 var orderWorkers = {
  
     buildCreep: function() {
@@ -19,25 +8,28 @@ var orderWorkers = {
                 console.log(`spawn has ${energyAvailable} available energy`);
             }
         }
-        
-        if(Object.keys(Game.creeps).length < 8) {
+        //Maintain at least 8 worker types
+        let creepWorkerCount = _.filter(Game.creeps, (creep) => creep.memory.function == 'worker').length;
+        if(creepWorkerCount < 8) {
+            console.log(`At ${creepWorkerCount} out of 8`);
             var name;
-            if(energyAvailable == 500) {
+            if(energyAvailable >= 550) {
                 name = this.collector();
-            } else {
+            } else if(energyAvailable >= 300) {
                 name = this.basic();
             }
-            if(name != ERR_NOT_ENOUGH_ENERGY){
+            
+            if(name && name != ERR_NOT_ENOUGH_ENERGY){
                 console.log(`Creating Creep ${name}`);
             }
         }
     },
     calcCost: function(limbs) {
-        let cost = 0;
-        for(let limb in limbs) {
-            cost += LIMB_COSTS[limb] 
-        }
-        return cost;
+        return limbs.map(function(value) { 
+            return BODYPART_COST[value];
+        }).reduce(function(a, b) {
+            return a + b;
+        }, 0);
     },
     build: function(limbs, memory) {
         console.log(`Creating a Collector with a cost of ${this.calcCost(limbs)}`);
@@ -45,14 +37,18 @@ var orderWorkers = {
     },
     recharger: function() {
         let limbs = [WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,MOVE];
-        return this.build(limbs, { 'function': 'recharger'});
+        return this.build(limbs, { 'function': 'worker'});
+    },
+    defender: function() {
+        let limbs = [ATTACK,ATTACK,ATTACK,ATTACK,MOVE,MOVE,MOVE];
+        return this.build(limbs, { 'function': 'solider', 'role': 'melee'});
     },
     collector: function() {
-        let limbs = [WORK,WORK,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE];
+        let limbs = [WORK,WORK,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE];
         return this.build(limbs, { 'function': 'worker'});
     },
     basic: function() {
-        let limbs = [WORK,CARRY,MOVE,MOVE];
+        let limbs = [WORK,WORK,CARRY,MOVE];
         return this.build(limbs, { 'function': 'worker'});
         //console.log(`Creating a Collector with a cost of 300`);
         //return Game.spawns['core1'].createCreep(limbs, undefined, { 'function': 'worker'});

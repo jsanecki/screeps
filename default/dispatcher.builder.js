@@ -31,7 +31,7 @@ var dispatcher = {
                     if(creep.room.energyAvailable < creep.room.energyCapacityAvailable) {
                         console.log(`Dispatching ${ creep.name } to Recharge Spawners`);
                         creep.memory.role = TYPES.RECHARGE;
-                    } else if (upgraderCount < 1) {
+                    } else if (upgraderCount < 3) {
                         console.log(`Dispatching ${ creep.name } to Upgrade`);
                         creep.memory.role = TYPES.UPGRADE;
                     } else if(0 < Object.keys(creep.room.find(FIND_CONSTRUCTION_SITES)).length) {
