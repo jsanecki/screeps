@@ -1,3 +1,5 @@
+const WORKER_COUNT = 10;
+
 var orderWorkers = {
  
     buildCreep: function() {
@@ -8,10 +10,10 @@ var orderWorkers = {
                 console.log(`spawn has ${energyAvailable} available energy`);
             }
         }
-        //Maintain at least 8 worker types
+        //Maintain at least X worker types
         let creepWorkerCount = _.filter(Game.creeps, (creep) => creep.memory.function == 'worker').length;
-        if(creepWorkerCount < 8) {
-            console.log(`At ${creepWorkerCount} out of 8`);
+        if(creepWorkerCount < WORKER_COUNT) {
+            console.log(`At ${creepWorkerCount} out of ${WORKER_COUNT}`);
             var name;
             if(energyAvailable >= 550) {
                 name = this.collector();
@@ -44,7 +46,7 @@ var orderWorkers = {
         return this.build(limbs, { 'function': 'solider', 'role': 'melee'});
     },
     collector: function() {
-        let limbs = [WORK,WORK,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE];
+        let limbs = [WORK,WORK,WORK,CARRY,CARRY,MOVE,MOVE,MOVE];
         return this.build(limbs, { 'function': 'worker'});
     },
     basic: function() {

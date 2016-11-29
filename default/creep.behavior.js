@@ -2,6 +2,7 @@ var roleCollector = require('role.collector');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleRecharge = require('role.recharger');
+var roleRepair = require('role.repair');
 /*
  * Module code goes here. Use 'module.exports' to export things:
  * module.exports.thing = 'a thing';
@@ -19,6 +20,22 @@ const creepTypes = {
     
 var creepBehavior = {
     run: function() {
+        
+        var tower = Game.getObjectById('583b5efc3ae26bf86d6f6f0b');
+        if(tower) {
+            var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+                filter: (structure) => structure.hits < structure.hitsMax
+            });
+            if(closestDamagedStructure) {
+                tower.repair(closestDamagedStructure);
+            }
+    
+            var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+            if(closestHostile) {
+                tower.attack(closestHostile);
+            }
+        }
+        
         for(var name in Game.creeps) {
             var creep = Game.creeps[name];
             
