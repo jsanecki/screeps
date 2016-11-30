@@ -4,7 +4,7 @@ var roleCollector = {
     run: function(creep) {
         
         //TODO make a function to calculate slots for draining energy
-        var sourceSlots = [1,1,1,1,1,1,0];
+        var sourceSlots = [1,1,1,0];
         var sources = creep.room.find(FIND_SOURCES);
         
         if(creep.memory.sourceIndex == undefined ) {

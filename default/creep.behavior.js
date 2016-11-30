@@ -3,6 +3,7 @@ var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleRecharge = require('role.recharger');
 var roleRepair = require('role.repair');
+var roleTanker = require('role.tanker');
 /*
  * Module code goes here. Use 'module.exports' to export things:
  * module.exports.thing = 'a thing';
@@ -12,10 +13,11 @@ var roleRepair = require('role.repair');
  * mod.thing == 'a thing'; // true
  */
 const creepTypes = {
-    "COLLECT":"collector",
-    "RECHARGE": "recharger",
-    "BUILD": "builder",
-    "UPGRADE": "upgrader"
+    'COLLECT':'collector',
+    'RECHARGE': 'recharger',
+    'BUILD': 'builder',
+    'UPGRADE': 'upgrader',
+    'TANK': 'tanker'
     };
     
 var creepBehavior = {
@@ -24,7 +26,7 @@ var creepBehavior = {
         var tower = Game.getObjectById('583b5efc3ae26bf86d6f6f0b');
         if(tower) {
             var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-                filter: (structure) => structure.hits < structure.hitsMax
+                filter: (structure) => structure.hits < structure.hitsMax && structure.hits < 50000
             });
             if(closestDamagedStructure) {
                 tower.repair(closestDamagedStructure);
@@ -42,15 +44,14 @@ var creepBehavior = {
             if(creep.memory.role) {
                 if(creep.memory.role == creepTypes.COLLECT) {
                     roleCollector.run(creep);
-                }
-                if(creep.memory.role == creepTypes.RECHARGE) {
+                } else if(creep.memory.role == creepTypes.RECHARGE) {
                     roleRecharge.run(creep);
-                }
-                if(creep.memory.role == creepTypes.BUILD) {
+                } else if(creep.memory.role == creepTypes.BUILD) {
                    roleBuilder.run(creep);
-                }
-                if(creep.memory.role == creepTypes.UPGRADE) {
+                } else if(creep.memory.role == creepTypes.UPGRADE) {
                     roleUpgrader.run(creep);
+                } else if(creep.memory.role == creepTypes.TANK) {
+                    roleTanker.run(creep);
                 }
             }
         }
