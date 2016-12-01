@@ -26,7 +26,7 @@ var creepBehavior = {
         var tower = Game.getObjectById('583b5efc3ae26bf86d6f6f0b');
         if(tower) {
             var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-                filter: (structure) => structure.hits < structure.hitsMax && structure.hits < 50000
+                filter: (structure) => structure.hits < structure.hitsMax && structure.hits < 250000
             });
             if(closestDamagedStructure) {
                 tower.repair(closestDamagedStructure);

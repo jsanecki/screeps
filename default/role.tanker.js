@@ -5,11 +5,12 @@ var roleTanker = {
     /** @param {Creep} creep **/
     run: function(creep) {
 
-        if(creep.energyAvailable == 0) {
+        if(creep.carry.energy == 0 && creep.memory.mode != 'recharge') {
+            creep.say('recharging');
             creep.memory.mode = 'recharge';
         }
         
-        if(creep.energyAvailable == creep.energyCapacityAvailable) {
+        if(creep.carry.energy == creep.carryCapacity) {
             delete creep.memory.mode;
         }
 
@@ -27,18 +28,28 @@ var roleTanker = {
                 creep.say(creep.carry.energy + '/' + creep.carryCapacity);
             }
         } else {
-            var targets = creep.room.find(FIND_STRUCTURES, {
+            var stores = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_CONTAINER ||
-                            structure.structureType == STRUCTURE_TOWER) && 
-                            structure.energy < structure.energyCapacity;
+                    return (structure.structureType == STRUCTURE_STORAGE ||
+                            structure.structureType == STRUCTURE_TOWER ||
+                            structure.structureType == STRUCTURE_EXTENSION) && 
+                            structure.energy < structure.energyCapacity
                 }
             });
             
-            if(targets.length > 0) {
-                if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0]);
+            var containers = creep.room.find(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return (structure.structureType == STRUCTURE_CONTAINER) && (structure.store[RESOURCE_ENERGY] < structure.storeCapacity);
+                }
+            });
+            if(stores.length > 0) {
+                if(creep.transfer(stores[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(stores[0]);
                 } 
+            } else if(containers.length > 0) {
+                if(creep.transfer(containers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(containers[0]);
+                }
             }
         }
     }

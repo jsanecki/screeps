@@ -18,12 +18,10 @@ var orderWorkers = {
         if(creepWorkerCount < WORKER_COUNT) {
             console.log(`At ${creepWorkerCount} out of ${WORKER_COUNT}`);
             var name;
-            if(energyAvailable >= 800 && creepTankerCount < 1) {
+            if(energyAvailable >= 800 && creepTankerCount < 3) {
                 name = this.tanker();
-            } else if(energyAvailable >= 550 && energyCapacity <= 800) {
-                name = this.collector();
-            } else if(energyAvailable >= 300 && energyCapacity < 500) {
-                name = this.basic();
+            } else if(energyAvailable >= 300) {
+                name = this.basic(energyAvailable);
             }
             
             if(name && name != ERR_NOT_ENOUGH_ENERGY){
@@ -38,6 +36,14 @@ var orderWorkers = {
             return a + b;
         }, 0);
     },
+    maxLimbs: function(limbSet, energy) {
+        let sets = Math.round(energy / this.calcCost(limbSet));
+        let limbs = [];
+        for(let i = 0; i < sets;i++) {
+            limbs = limbs.concat(limbSet);
+        }
+        return limbs;
+    },
     build: function(limbs, memory) {
         console.log(`Creating a Collector with a cost of ${this.calcCost(limbs)}`);
         return Game.spawns['core1'].createCreep(limbs, undefined, memory);
@@ -46,23 +52,25 @@ var orderWorkers = {
         let limbs = [WORK,
         WORK,
         WORK,
+        WORK,
         CARRY,CARRY,
         CARRY,CARRY,
         CARRY,CARRY,
-        CARRY,CARRY,
-        MOVE,MOVE];
-        return this.build(limbs, { 'function': 'worker', 'role': 'tanker'});
+        MOVE,CARRY];
+        return this.build(limbs, { 'function': 'tanker', 'role': 'tanker'});
     },
-    defender: function() {
-        let limbs = [ATTACK,ATTACK,ATTACK,ATTACK,MOVE,MOVE,MOVE];
-        return this.build(limbs, { 'function': 'solider', 'role': 'melee'});
+    defender: function(energy) {
+        let limbs = [ATTACK,TOUGH,TOUGH,MOVE,MOVE];
+        return this.build(this.maxLimbs(limbs, energy), { 'function': 'solider', 'role': 'melee'});
     },
-    collector: function() {
-        let limbs = [WORK,WORK,WORK,CARRY,CARRY,MOVE,MOVE,MOVE];
-        return this.build(limbs, { 'function': 'worker'});
-    },
-    basic: function() {
-        let limbs = [WORK,WORK,CARRY,MOVE];
+    basic: function(energy) {
+        let sets = Math.round(energy / 200);
+        let limbs = [];
+        let limbSet= [WORK,CARRY,MOVE];
+        for(let i = 0; i < sets;i++) {
+            limbs = limbs.concat(limbSet);
+        }
+        console.log(`Making Creep with ${limbs.length} limbs`);
         return this.build(limbs, { 'function': 'worker'});
     }
 }
