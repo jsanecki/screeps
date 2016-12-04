@@ -24,7 +24,10 @@ var dispatcher = {
             if(!creep.memory.role) {
                 //console.log('Dispatching');
                 //console.log(`Sites Detected ${Object.keys(creep.room.find(FIND_CONSTRUCTION_SITES)).length}`);
-                if(creep.carry.energy < (creep.carryCapacity * .2)) {
+                if(creep.ticksToLive < 100 && ((creep.memory.generation && creep.memory.generation > 5) || creep.memory.classifer == 'specialist')) {
+                    console.log(`Dispatching ${creep.name} to Renew at Spawner`)
+                    creep.memory.role = TYPES.RENEW;
+                } else if(creep.carry.energy < (creep.carryCapacity * .2)) {
                     console.log(`Dispatching ${ creep.name } to Collect Energy`);
                     creep.memory.role = TYPES.COLLECT;
                 } else {

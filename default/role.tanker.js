@@ -28,25 +28,15 @@ var roleTanker = {
                 creep.say(creep.carry.energy + '/' + creep.carryCapacity);
             }
         } else {
-            var stores = creep.room.find(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_STORAGE ||
-                            structure.structureType == STRUCTURE_TOWER ||
-                            structure.structureType == STRUCTURE_EXTENSION) && 
-                            structure.energy < structure.energyCapacity
-                }
-            });
-            
             var containers = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_CONTAINER) && (structure.store[RESOURCE_ENERGY] < structure.storeCapacity);
+                    return (structure.structureType == STRUCTURE_STORAGE) &&
+                    //structure.structureType == STRUCTURE_CONTAINER) &&
+                    (structure.store[RESOURCE_ENERGY] < structure.storeCapacity);
                 }
             });
-            if(stores.length > 0) {
-                if(creep.transfer(stores[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(stores[0]);
-                } 
-            } else if(containers.length > 0) {
+            console.log(`Tanker looking at ${containers.length} Containers`);
+            if(containers.length > 0) {
                 if(creep.transfer(containers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(containers[0]);
                 }

@@ -1,23 +1,27 @@
-var roleCollector = require('role.collector');
-var roleUpgrader = require('role.upgrader');
-var roleBuilder = require('role.builder');
-var roleRecharge = require('role.recharger');
-var roleRepair = require('role.repair');
-var roleTanker = require('role.tanker');
+let roleCollector = require('role.collector');
+let roleUpgrader = require('role.upgrader');
+let roleBuilder = require('role.builder');
+let roleRecharge = require('role.recharger');
+let roleRepair = require('role.repair');
+let roleTanker = require('role.tanker');
+let roleRenew = require('role.renew');
+
 /*
- * Module code goes here. Use 'module.exports' to export things:
- * module.exports.thing = 'a thing';
+ * Creep Design 
+ * Creeps will have a Classifer that will sets what behaviors can be dispatched to them
+ * Classifer types include - Worker, Solider, Specialist, Scout, Invader 
+ * 
+ * Role is the current behavior that the creep is performing
  *
- * You can import it from another modules like this:
- * var mod = require('creep.behavior');
- * mod.thing == 'a thing'; // true
+ * Generation is the size of the creep based on it limbs, this only for creeps that build based on energy avaliable
  */
 const creepTypes = {
     'COLLECT':'collector',
     'RECHARGE': 'recharger',
     'BUILD': 'builder',
     'UPGRADE': 'upgrader',
-    'TANK': 'tanker'
+    'TANK': 'tanker',
+    'RENEW': 'carousel'
     };
     
 var creepBehavior = {
@@ -41,18 +45,27 @@ var creepBehavior = {
         for(var name in Game.creeps) {
             var creep = Game.creeps[name];
             
-            if(creep.memory.role) {
-                if(creep.memory.role == creepTypes.COLLECT) {
+            switch (creep.memory.role) {
+                case creepTypes.COLLECT:
                     roleCollector.run(creep);
-                } else if(creep.memory.role == creepTypes.RECHARGE) {
+                    break;
+                case creepTypes.RECHARGE: 
                     roleRecharge.run(creep);
-                } else if(creep.memory.role == creepTypes.BUILD) {
+                    break;
+                case creepTypes.BUILD: 
                    roleBuilder.run(creep);
-                } else if(creep.memory.role == creepTypes.UPGRADE) {
+                   break;
+                case creepTypes.UPGRADE:
                     roleUpgrader.run(creep);
-                } else if(creep.memory.role == creepTypes.TANK) {
+                    break;
+                case creepTypes.TANK:
                     roleTanker.run(creep);
-                }
+                    break;
+                case creepTypes.RENEW:
+                    roleRenew.run(creep);
+                    break;
+                default:
+                    console.log('default');
             }
         }
     },
