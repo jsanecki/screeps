@@ -61,6 +61,10 @@ var orderWorkers = {
         console.log(`Creating a Collector with a cost of ${this.calcCost(limbs)}`);
         return Game.spawns['core1'].createCreep(limbs, undefined, memory);
     },
+    runner: function() {
+        let limbs = [WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE];
+        return this.build(limbs, { 'classifier':'runner', 'role': 'collector' });
+    },
     tanker: function() {
         let limbs = [WORK,
         WORK,
@@ -75,7 +79,7 @@ var orderWorkers = {
         CARRY,CARRY,
         CARRY,CARRY,
         MOVE,MOVE];
-        return this.build(limbs, { 'function': 'tanker', 'role': 'tanker', 'classifier': 'Specialist'});
+        return this.build(limbs, { 'function': 'tanker', 'role': 'tanker', 'classifier': 'specialist'});
     },
     defender: function(energy) {
         let limbSet = [ATTACK,TOUGH,TOUGH,MOVE,MOVE];

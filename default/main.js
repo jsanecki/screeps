@@ -1,6 +1,9 @@
-var orderWorkers = require('order.workers');
-var dispatcher = require('dispatcher.builder');
-var behavior = require('creep.behavior');
+var spawnController = require('order.workers');
+
+var workerDispatcher = require('dispatcher.builder');
+var workerBehavior = require('creep.behavior');
+
+var invaderBehavior = require('invader.behavior');
 
 var SPAWN_NAME = 'core1';
 
@@ -22,9 +25,10 @@ module.exports.loop = function () {
     //     }
     // } 
     
-    orderWorkers.buildCreep();
+    spawnController.buildCreep();
 
-    dispatcher.orderCreeps();
+    workerDispatcher.orderCreeps();
+    workerBehavior.run();
     
-    behavior.run();
+    invaderBehavior.run();
 }

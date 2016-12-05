@@ -1,7 +1,16 @@
-var roleCollector = {
+var invaderCollector = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
+        
+        var rooms = [];
+        for(flag in Game.flags) {
+            if(flag.includes('Expansion')) {
+                rooms.push(Game.flags[flag].pos.roomName);
+            }
+        }
+        console.log(`${JSON.stringify(rooms)}`);
+        
         //TODO make a function to calculate slots for draining energy
         var sourceSlots = [1];
         var sources = creep.room.find(FIND_SOURCES);
@@ -24,4 +33,4 @@ var roleCollector = {
 	}
 };
 
-module.exports = roleCollector;
+module.exports = invaderCollector;
