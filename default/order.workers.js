@@ -13,12 +13,13 @@ var orderWorkers = {
 
         }
         //Maintain at least X worker types
-        let creepWorkerCount = _.filter(Game.creeps, (creep) => creep.memory.function == 'worker').length;
-        let creepSpecialistCount = _.filter(Game.creeps, (creep) => creep.memory.function == 'tanker').length;
+        let creepWorkerCount = _.filter(Game.creeps, (creep) => creep.memory.classifier == 'worker').length;
+        let creepSpecialistCount = _.filter(Game.creeps, (creep) => creep.memory.classifier == 'specialist').length;
+        let creepRunnerCount = _.filter(Game.creeps, (creep) => creep.memory.classifier == 'runner').length;
         
         if(Game.time % 10 == 0) {
             console.log(`This room Spawner has ${energyAvailable} available energy out of ${energyCapacity}`);
-            console.log(`Workers at ${creepWorkerCount} out of ${WORKER_COUNT}, and ${creepSpecialistCount} Specialists`);
+            console.log(`Workers at ${creepWorkerCount} out of ${WORKER_COUNT}, and ${creepSpecialistCount} Specialists, ${creepRunnerCount} Runners`);
         }
         
         if(creepWorkerCount < WORKER_COUNT) {
@@ -37,6 +38,12 @@ var orderWorkers = {
             if(energyAvailable >= 1200 && creepSpecialistCount < 1) {
                 if(this.tanker() != ERR_NOT_ENOUGH_ENERGY) {
                     console.log(`Creating Tanker`);
+                }
+            }
+        } else if(creepRunnerCount < 2) {
+            if(energyAvailable > 600) {
+                if(this.runner() != ERR_NOT_ENOUGH_ENERGY) {    
+                    console.log(`Creating Runner`);
                 }
             }
         }
@@ -58,11 +65,11 @@ var orderWorkers = {
         return { 'limbs': limbs, 'generation': sets };
     },
     build: function(limbs, memory) {
-        console.log(`Creating a Collector with a cost of ${this.calcCost(limbs)}`);
+        console.log(`Creating a Creep with a cost of ${this.calcCost(limbs)}`);
         return Game.spawns['core1'].createCreep(limbs, undefined, memory);
     },
     runner: function() {
-        let limbs = [WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE];
+        let limbs = [WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE];
         return this.build(limbs, { 'classifier':'runner', 'role': 'collector' });
     },
     tanker: function() {
@@ -79,12 +86,12 @@ var orderWorkers = {
         CARRY,CARRY,
         CARRY,CARRY,
         MOVE,MOVE];
-        return this.build(limbs, { 'function': 'tanker', 'role': 'tanker', 'classifier': 'specialist'});
+        return this.build(limbs, { 'role': 'tanker', 'classifier': 'specialist'});
     },
     defender: function(energy) {
         let limbSet = [ATTACK,TOUGH,TOUGH,MOVE,MOVE];
         let stucture = this.maxLimbs(limbSet, energy)
-        return this.build(stucture.limbs, { 'function': 'solider', 'role': 'defender', 'classifier': 'soldier', 'generation': stucture.generation });
+        return this.build(stucture.limbs, { 'role': 'defender', 'classifier': 'soldier', 'generation': stucture.generation });
     },
     basic: function(energy) {
         let limbSet= [WORK,CARRY,MOVE];
@@ -95,7 +102,7 @@ var orderWorkers = {
             limbs = limbs.concat(limbSet);
         }
         console.log(`Making Creep with ${limbs.length} limbs`);
-        return this.build(limbs, { 'function': 'worker', 'classifier': 'worker', 'generation': sets});
+        return this.build(limbs, { 'classifier': 'worker', 'generation': sets});
     }
 }
 

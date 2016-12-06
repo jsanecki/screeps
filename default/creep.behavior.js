@@ -42,8 +42,9 @@ var creepBehavior = {
             }
         }
         
-        for(var name in Game.creeps) {
-            var creep = Game.creeps[name];
+        let creeps = _.filter(Game.creeps, (creep) => (creep.memory.classifier === 'worker' || creep.memory.classifier === 'specialist'));
+        for(var name in creeps) {
+            var creep = creeps[name];
             
             switch (creep.memory.role) {
                 case creepTypes.COLLECT:
@@ -65,7 +66,7 @@ var creepBehavior = {
                     roleRenew.run(creep);
                     break;
                 default:
-                    console.log('default');
+                    console.log(`${creep.name} has unknown role of ${creep.memory.role}`);
             }
         }
     },

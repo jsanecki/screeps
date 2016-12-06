@@ -8,7 +8,7 @@ var dispatcher = {
         let count = 0
         for(var name in Game.creeps) {
             var creep = Game.creeps[name];
-            if(creep.memory.role == TYPES.UPGRADE) {
+            if(creep.memory.role == TYPES.UPGRADE && creep.memory.classifier == 'worker') {
                 count++;
             }
         }
@@ -16,15 +16,13 @@ var dispatcher = {
     },
     orderCreeps: function() {
         let upgraderCount = this.calNumberOfUpgraders();
-        //console.log(`Count of Upgraders is at ${upgraderCount}`);
-        
-        for(var name in Game.creeps) {
-            var creep = Game.creeps[name];
+
+        let creeps = _.filter(Game.creeps, (creep) => (creep.memory.classifier == 'worker' || creep.memory.classifier == 'specialist'));
+        for(var name in creeps) {
+            let creep = creeps[name];
             
             if(!creep.memory.role) {
-                //console.log('Dispatching');
-                //console.log(`Sites Detected ${Object.keys(creep.room.find(FIND_CONSTRUCTION_SITES)).length}`);
-                if(creep.ticksToLive < 100 && ((creep.memory.generation && creep.memory.generation > 5) || creep.memory.classifer == 'specialist')) {
+                if(creep.ticksToLive < 100 && ((creep.memory.generation && creep.memory.generation > 5) || creep.memory.classifier == 'specialist')) {
                     console.log(`Dispatching ${creep.name} to Renew at Spawner`)
                     creep.memory.role = TYPES.RENEW;
                 } else if(creep.carry.energy < (creep.carryCapacity * .2)) {
