@@ -5,6 +5,7 @@ let roleRecharge = require('role.recharger');
 let roleRepair = require('role.repair');
 let roleTanker = require('role.tanker');
 let roleRenew = require('role.renew');
+let C = require('role.constants');
 
 /*
  * Creep Design 
@@ -15,15 +16,6 @@ let roleRenew = require('role.renew');
  *
  * Generation is the size of the creep based on it limbs, this only for creeps that build based on energy avaliable
  */
-const creepTypes = {
-    'COLLECT':'collector',
-    'RECHARGE': 'recharger',
-    'BUILD': 'builder',
-    'UPGRADE': 'upgrader',
-    'TANK': 'tanker',
-    'RENEW': 'carousel'
-    };
-    
 var creepBehavior = {
     run: function() {
         
@@ -42,34 +34,33 @@ var creepBehavior = {
             }
         }
         
-        let creeps = _.filter(Game.creeps, (creep) => (creep.memory.classifier === 'worker' || creep.memory.classifier === 'specialist'));
+        let creeps = _.filter(Game.creeps, (creep) => (creep.memory.classifier === C.CLASSIFIER.WORKER || creep.memory.classifier === C.CLASSIFIER.SPECIALIST));
         for(var name in creeps) {
             var creep = creeps[name];
             
             switch (creep.memory.role) {
-                case creepTypes.COLLECT:
+                case C.COLLECT:
                     roleCollector.run(creep);
                     break;
-                case creepTypes.RECHARGE: 
+                case C.RECHARGE: 
                     roleRecharge.run(creep);
                     break;
-                case creepTypes.BUILD: 
+                case C.BUILD: 
                    roleBuilder.run(creep);
                    break;
-                case creepTypes.UPGRADE:
+                case C.UPGRADE:
                     roleUpgrader.run(creep);
                     break;
-                case creepTypes.TANK:
+                case C.TANK:
                     roleTanker.run(creep);
                     break;
-                case creepTypes.RENEW:
+                case C.RENEW:
                     roleRenew.run(creep);
                     break;
                 default:
                     console.log(`${creep.name} has unknown role of ${creep.memory.role}`);
             }
         }
-    },
-    TYPES : function() { return creepTypes }
+    }
 }
 module.exports = creepBehavior;

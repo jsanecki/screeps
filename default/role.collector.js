@@ -3,7 +3,7 @@ let roleCollector = {
     /** @param {Creep} creep **/
     run: function(creep) {
         //TODO make a function to calculate slots for draining energy
-        let sourceSlots = [1];
+        let sourceSlots = [1,1,1,1,1,1,0];
         let sources = creep.room.find(FIND_SOURCES);
  
         if(creep.memory.sourceIndex == undefined ) {

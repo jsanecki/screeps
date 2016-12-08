@@ -22,25 +22,18 @@ var orderWorkers = {
             console.log(`Workers at ${creepWorkerCount} out of ${WORKER_COUNT}, and ${creepSpecialistCount} Specialists, ${creepRunnerCount} Runners`);
         }
         
-        if(creepWorkerCount < WORKER_COUNT) {
-            var name;
-            if(energyAvailable >= 400) {
-                name = this.basic(energyAvailable);
-            } else if(energyAvailable >= 200 && creepWorkerCount < 3) {
-                name = this.basic(energyAvailable);
-            }
-            
-            if(name && name != ERR_NOT_ENOUGH_ENERGY){
-                console.log(`Creating Creep ${name}`);
-            }
-        } else if(creepSpecialistCount < SPECIALIST_COUNT) { 
+        if(creepWorkerCount < WORKER_COUNT && energyAvailable > 200) {
+            if(this.basic(energyAvailable) != ERR_NOT_ENOUGH_ENERGY) {
+                console.log(`Creating Creep`);
+            } 
+        } else if(creepSpecialistCount < SPECIALIST_COUNT && creepWorkerCount >= WORKER_COUNT) { 
             var name;
             if(energyAvailable >= 1200 && creepSpecialistCount < 1) {
                 if(this.tanker() != ERR_NOT_ENOUGH_ENERGY) {
                     console.log(`Creating Tanker`);
                 }
             }
-        } else if(creepRunnerCount < 2) {
+        } else if(creepRunnerCount < 2 && creepWorkerCount >= WORKER_COUNT) {
             if(energyAvailable > 600) {
                 if(this.runner() != ERR_NOT_ENOUGH_ENERGY) {    
                     console.log(`Creating Runner`);

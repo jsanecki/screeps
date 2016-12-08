@@ -1,12 +1,19 @@
-/*
- * Module code goes here. Use 'module.exports' to export things:
- * module.exports.thing = 'a thing';
- *
- * You can import it from another modules like this:
- * var mod = require('role.defender');
- * mod.thing == 'a thing'; // true
- */
+let denfender = {
 
-module.exports = {
-
+    /** @param {Creep} creep **/
+    run: function(creep) {
+        let flags = [];
+        for(flag in Game.flags) {
+            if(flag.includes('Gate')) {
+                flags.push(Game.flags[flag]);
+            }
+        }
+        
+        creep.moveTo(flags[0]);
+	},
+	reset: function(creep) {
+	    delete creep.memory.role;
+	}
 };
+
+module.exports = defender;
