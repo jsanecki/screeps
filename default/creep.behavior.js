@@ -19,7 +19,7 @@ let C = require('role.constants');
 var creepBehavior = {
     run: function() {
         
-        var tower = Game.getObjectById('583b5efc3ae26bf86d6f6f0b');
+        var tower = Game.getObjectById('584a1f5949fd818920f17ff1');
         if(tower) {
             var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: (structure) => structure.hits < structure.hitsMax && structure.hits < 250000

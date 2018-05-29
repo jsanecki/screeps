@@ -29,16 +29,10 @@ var orderWorkers = {
         } else if(creepSpecialistCount < SPECIALIST_COUNT && creepWorkerCount >= WORKER_COUNT) { 
             var name;
             if(energyAvailable >= 1200 && creepSpecialistCount < 1) {
-                if(this.tanker() != ERR_NOT_ENOUGH_ENERGY) {
-                    console.log(`Creating Tanker`);
-                }
+                if(this.tanker() != ERR_NOT_ENOUGH_ENERGY) { console.log(`Creating Tanker`); }
             }
-        } else if(creepRunnerCount < 2 && creepWorkerCount >= WORKER_COUNT) {
-            if(energyAvailable > 600) {
-                if(this.runner() != ERR_NOT_ENOUGH_ENERGY) {    
-                    console.log(`Creating Runner`);
-                }
-            }
+        } else if(creepRunnerCount < 2 && creepWorkerCount >= WORKER_COUNT && energyAvailable > 600) {
+                if(this.runner() != ERR_NOT_ENOUGH_ENERGY) { console.log(`Creating Runner`); }
         }
         
     },
@@ -59,7 +53,7 @@ var orderWorkers = {
     },
     build: function(limbs, memory) {
         console.log(`Creating a Creep with a cost of ${this.calcCost(limbs)}`);
-        return Game.spawns['core1'].createCreep(limbs, undefined, memory);
+        return Game.spawns['Mojo-Core'].createCreep(limbs, undefined, memory);
     },
     runner: function() {
         let limbs = [WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE];

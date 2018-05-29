@@ -1,19 +1,29 @@
+/**
+ * role.collector
+ * 
+ * creep role for collecting energy from nodes. If the the creep doesn't have a
+ * node to focus on, then a node will be selected and set to it's memory.
+ * 
+ * This role will also handle collecting energy and storing it.
+ * 
+ * TODO make a function to calculate slots for draining energy for each source
+**/
 let roleCollector = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-        //TODO make a function to calculate slots for draining energy
-        let sourceSlots = [1,1,1,1,1,1,0];
+        
         let sources = creep.room.find(FIND_SOURCES);
- 
+        let sourceCount = sources.length;
+        
         if(creep.memory.sourceIndex == undefined ) {
             if(sources.length === 1) {
                 creep.memory.sourceIndex = 0;
             } else {
-                creep.memory.sourceIndex = sourceSlots[Math.floor(Math.random() * sourceSlots.length)];
+                creep.memory.sourceIndex = Math.floor(Math.random() * sourceCount);
             }
         }
-        
+
         if(sources[creep.memory.sourceIndex].energy == 0) {
             let storage = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {

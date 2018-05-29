@@ -8,7 +8,7 @@ let invaderBehavior = require('invader.behavior');
 let runnerDispatcher = require('runner.dispatcher');
 let runnerBehavior = require('runner.behavior');
 
-let SPAWN_NAME = 'core1';
+let SPAWN_NAME = 'Mojo-Core';
 
 module.exports.loop = function () {
 
@@ -24,8 +24,8 @@ module.exports.loop = function () {
     workerDispatcher.orderCreeps();
     workerBehavior.run();
     
-    invaderBehavior.run();
+    //invaderBehavior.run();
     
-    runnerDispatcher.run();
-    runnerBehavior.run();
+    //runnerDispatcher.run();
+    //runnerBehavior.run();
 }
