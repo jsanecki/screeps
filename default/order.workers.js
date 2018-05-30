@@ -1,43 +1,57 @@
-const WORKER_COUNT = 10;
+let C = require('role.constants');
+
+const WORKER_COUNT = C.CREEP_COUNTS.COLLECTOR;
 const SPECIALIST_COUNT = 1;
 const SOLIDERS = 10;
 
 var orderWorkers = {
- 
-    buildCreep: function() {
-        let energyAvailable = 0;
-        let energyCapacity = 0;
-        for(let spawn in Game.spawns) {
-            energyAvailable = Game.spawns[spawn].room.energyAvailable;
-            energyCapacity = Game.spawns[spawn].room.energyCapacityAvailable;
 
-        }
-        //Maintain at least X worker types
-        let creepWorkerCount = _.filter(Game.creeps, (creep) => creep.memory.classifier == 'worker').length;
-        let creepSpecialistCount = _.filter(Game.creeps, (creep) => creep.memory.classifier == 'specialist').length;
-        let creepRunnerCount = _.filter(Game.creeps, (creep) => creep.memory.classifier == 'runner').length;
-        
+    getCreepStatus: function() {
+      return {
+        'worker': _.filter(Game.creeps, (creep) => creep.memory.classifier == 'worker').length,
+        'specialist': _.filter(Game.creeps, (creep) => creep.memory.classifier == 'specialist').length,
+        'runner': _.filter(Game.creeps, (creep) => creep.memory.classifier == 'runner').length
+      };
+    },
+    getEnergyStatus: function() {
+      let energyAvailable = 0;
+      let energyCapacity = 0;
+      for(let spawn in Game.spawns) {
+          energyAvailable = Game.spawns[spawn].room.energyAvailable;
+          energyCapacity = Game.spawns[spawn].room.energyCapacityAvailable;
+      }
+
+      return {
+        'available': energyAvailable,
+        'capacity': energyCapacity
+      }
+    },
+    buildCreep: function() {
+        const CREEPER_STATUS = this.getCreepStatus();
+        const ENERGY_STATUS = this.getEnergyStatus();
+
+        //Report on current Status
         if(Game.time % 10 == 0) {
-            console.log(`This room Spawner has ${energyAvailable} available energy out of ${energyCapacity}`);
-            console.log(`Workers at ${creepWorkerCount} out of ${WORKER_COUNT}, and ${creepSpecialistCount} Specialists, ${creepRunnerCount} Runners`);
+            console.log(`This room Spawner has ${ENERGY_STATUS.available} available energy out of ${ENERGY_STATUS.capacity}`);
+            console.log(`Workers at ${CREEPER_STATUS.worker} out of ${WORKER_COUNT}, and ${CREEPER_STATUS.specialist} Specialists, ${CREEPER_STATUS.runner} Runners`);
         }
-        
-        if(creepWorkerCount < WORKER_COUNT && energyAvailable > 200) {
-            if(this.basic(energyAvailable) != ERR_NOT_ENOUGH_ENERGY) {
+
+        if(CREEPER_STATUS.worker < WORKER_COUNT && ENERGY_STATUS.available > 200) {
+            if(this.basic(ENERGY_STATUS.available) != ERR_NOT_ENOUGH_ENERGY) {
                 console.log(`Creating Creep`);
-            } 
-        } else if(creepSpecialistCount < SPECIALIST_COUNT && creepWorkerCount >= WORKER_COUNT) { 
+            }
+        } else if(CREEPER_STATUS.specialist < SPECIALIST_COUNT && CREEPER_STATUS.worker >= WORKER_COUNT) {
             var name;
-            if(energyAvailable >= 1200 && creepSpecialistCount < 1) {
+            if(ENERGY_STATUS.available >= 1200 && CREEPER_STATUS.specialist < 1) {
                 if(this.tanker() != ERR_NOT_ENOUGH_ENERGY) { console.log(`Creating Tanker`); }
             }
-        } else if(creepRunnerCount < 2 && creepWorkerCount >= WORKER_COUNT && energyAvailable > 600) {
+        } else if(CREEPER_STATUS.runner < 2 && CREEPER_STATUS.worker >= WORKER_COUNT && ENERGY_STATUS.available > 600) {
                 if(this.runner() != ERR_NOT_ENOUGH_ENERGY) { console.log(`Creating Runner`); }
         }
-        
+
     },
     calcCost: function(limbs) {
-        return limbs.map(function(value) { 
+        return limbs.map(function(value) {
             return BODYPART_COST[value];
         }).reduce(function(a, b) {
             return a + b;

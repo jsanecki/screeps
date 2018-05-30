@@ -19,5 +19,8 @@ module.exports = Object.freeze({
         'WORKER': 'worker',
         'SPECIALIST':'specialist',
         'INVADER':'invader'
+    },
+    'CREEP_COUNTS': {
+        'COLLECTOR': 15
     }
 });

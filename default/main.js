@@ -26,6 +26,6 @@ module.exports.loop = function () {
     
     //invaderBehavior.run();
     
-    //runnerDispatcher.run();
-    //runnerBehavior.run();
+    runnerDispatcher.run();
+    runnerBehavior.run();
 }
