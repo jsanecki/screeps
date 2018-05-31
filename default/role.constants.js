@@ -21,6 +21,6 @@ module.exports = Object.freeze({
         'INVADER':'invader'
     },
     'CREEP_COUNTS': {
-        'COLLECTOR': 15
+        'COLLECTOR': 20
     }
 });
