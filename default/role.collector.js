@@ -20,7 +20,10 @@ let roleCollector = {
             if(sources.length === 1) {
                 creep.memory.sourceIndex = 0;
             } else {
-                creep.memory.sourceIndex = Math.floor(Math.random() * sourceCount);
+                let dist = [0,1,1]
+                let index = Math.floor(Math.random() * dist.length)
+                console.log(`Setting source index of ${dist[index]}`);
+                creep.memory.sourceIndex = dist[index];
             }
         }
 

@@ -97,7 +97,7 @@ var orderWorkers = {
     basic: function(energy) {
         let limbSet= [WORK,CARRY,MOVE];
         let sets = Math.floor(energy / this.calcCost(limbSet));
-        console.log(`sets ${ sets}`);
+        console.log(`generation will be ${ sets}`);
         let limbs = [];
         for(let i = 0; i < sets;i++) {
             limbs = limbs.concat(limbSet);

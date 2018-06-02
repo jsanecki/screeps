@@ -8,6 +8,8 @@ let invaderBehavior = require('invader.behavior');
 let runnerDispatcher = require('runner.dispatcher');
 let runnerBehavior = require('runner.behavior');
 
+let plannerWorld = require('planner.world');
+
 let SPAWN_NAME = 'Mojo-Core';
 
 module.exports.loop = function () {
@@ -16,9 +18,11 @@ module.exports.loop = function () {
       for(var name in Memory.creeps) {
           if(!Game.creeps[name]) {
               delete Memory.creeps[name];
-              console.log('Clearing non-existing creep memory:', name);
+              console.log('Main: Clearing non-existing creep memory:', name);
           }
       }
+
+      plannerWorld.update();
     }
 
     spawnController.buildCreep();

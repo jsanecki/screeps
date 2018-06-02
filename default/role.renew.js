@@ -6,12 +6,11 @@ var roleRenew = {
                 return structure.structureType == STRUCTURE_SPAWN;
             }
         });
-        
-        if(spawn[0].renewCreep(creep) == ERR_NOT_IN_RANGE) {
+
+        status = spawn[0].renewCreep(creep);
+        if(status == ERR_NOT_IN_RANGE) {
             creep.moveTo(spawn[0]);
-        }
-        
-        if(creep.ticksToLive > 1000) {
+        } else if (status == ERR_FULL) {
             this.reset(creep);
         }
     },
