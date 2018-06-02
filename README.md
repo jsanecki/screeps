@@ -11,8 +11,13 @@ It is very random and very unplanned.
 Code Restructure
   - [ ] Change construction of creeps to a Build Manager Module
   - [ ] Change Behavior of a creep to Behavior Module
-  - [ ] Change overall strategies to a Strategies Module.
+  - [ ] Change overall strategies to a Strategies Module
+  - [ ] Create a World Planner Module
 
 Logic Enhancements
   - [ ] Add Renew self logic
   - [ ] Add Repair decaying stuff logic
+
+Problems to Fix
+  - [ ] Not adding Energy to Room Controller
+  - [ ] Not renewing creeps

@@ -20,7 +20,8 @@ var dispatcher = {
             let creep = creeps[name];
             
             if(!creep.memory.role) {
-                if(creep.ticksToLive < 100 && ((creep.memory.generation && creep.memory.generation > 5) || creep.memory.classifier == 'specialist')) {
+                // If the creep is generation 4 or more, then allow it to renew, verse die and be replaced.
+                if(creep.ticksToLive < 300 && (creep.memory.generation && creep.memory.generation > 3)) {
                     console.log(`Dispatching ${creep.name} to Renew at Spawner`)
                     creep.memory.role = C.RENEW;
                 } else if(creep.carry.energy < (creep.carryCapacity * .2)) {
