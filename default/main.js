@@ -1,20 +1,20 @@
-let spawnController = require('order.workers');
+let planner_world = require('planner.world');
+let planner_creep = require('planner.creep');
 
-let workerDispatcher = require('dispatcher.builder');
-let workerBehavior = require('creep.behavior');
+let worker_dispatcher = require('worker.dispatcher');
+let worker_behavior = require('worker.behavior');
 
-let invaderBehavior = require('invader.behavior');
+//let warrior_behavior = require('warrior.behavior');
 
-let runnerDispatcher = require('runner.dispatcher');
-let runnerBehavior = require('runner.behavior');
-
-let plannerWorld = require('planner.world');
+//let runnerDispatcher = require('runner.dispatcher');
+//let runnerBehavior = require('runner.behavior');
 
 let SPAWN_NAME = 'Mojo-Core';
 
 module.exports.loop = function () {
 
-    if(Game.time % 20 == 0) {
+    // Periodic update and processing, to save on CPU
+    if(Game.time % 100 == 0) {
       for(var name in Memory.creeps) {
           if(!Game.creeps[name]) {
               delete Memory.creeps[name];
@@ -22,16 +22,20 @@ module.exports.loop = function () {
           }
       }
 
-      plannerWorld.update();
+      planner_world.update();
     }
 
-    spawnController.buildCreep();
+    // For each Tick planning
+    planner_creep.run();
 
-    workerDispatcher.orderCreeps();
-    workerBehavior.run();
+    // worker logic
+    worker_dispatcher.orderCreeps();
+    worker_behavior.run();
 
-    //invaderBehavior.run();
+    // warrior logic
+    //warrior_behavior.run();
 
-    runnerDispatcher.run();
-    runnerBehavior.run();
+    // explorer logic
+    //runnerDispatcher.run();
+    //runnerBehavior.run();
 }

@@ -1,12 +1,7 @@
-/*
- * Module code goes here. Use 'module.exports' to export things:
- * module.exports.thing = 'a thing';
- *
- * You can import it from another modules like this:
- * var mod = require('role.constants');
- * mod.thing == 'a thing'; // true
+/**
+ * @module role.constants
+ * Creep based Constants
  */
-
 module.exports = Object.freeze({
     'COLLECT':'collector',
     'RECHARGE': 'recharger',
@@ -14,13 +9,17 @@ module.exports = Object.freeze({
     'UPGRADE': 'upgrader',
     'TANK': 'tanker',
     'RENEW': 'carousel',
-    
+
     'CLASSIFIER': {
         'WORKER': 'worker',
-        'SPECIALIST':'specialist',
-        'INVADER':'invader'
+        'EXPLORER':'explorer',
+        'WARRIOR':'warrior'
     },
     'CREEP_COUNTS': {
-        'COLLECTOR': 12
-    }
+        'COLLECTOR': 10
+    },
+    'CREEP_ROLE_COUNTS': {
+        'UPGRADE': 2
+    },
+    'CREEP_RENEW_AT': 500
 });

@@ -1,7 +1,7 @@
 let C = require('role.constants');
 
 var dispatcher = {
-    
+
     calNumberOfUpgraders: function() {
         let count = 0
         for(var name in Game.creeps) {
@@ -15,30 +15,30 @@ var dispatcher = {
     orderCreeps: function() {
         let upgraderCount = this.calNumberOfUpgraders();
 
-        let creeps = _.filter(Game.creeps, (creep) => (creep.memory.classifier == 'worker' || creep.memory.classifier == 'specialist'));
+        let creeps = _.filter(Game.creeps, (creep) => (creep.memory.classifier == 'worker'));
         for(var name in creeps) {
             let creep = creeps[name];
-            
+
             if(!creep.memory.role) {
                 // If the creep is generation 4 or more, then allow it to renew, verse die and be replaced.
-                if(creep.ticksToLive < 300 && (creep.memory.generation && creep.memory.generation > 3)) {
-                    console.log(`Dispatcher[Builder]: Dispatching ${creep.name} to Renew at Spawner`)
+                if(creep.carry.energy < (creep.carryCapacity * .2) && creep.ticksToLive < C.CREEP_RENEW_AT && (creep.memory.generation && creep.memory.generation > 3)) {
+                    console.log(`Worker[Dispatcher]: Dispatching ${creep.name} to Renew at Spawner`)
                     creep.memory.role = C.RENEW;
                 } else if(creep.carry.energy < (creep.carryCapacity * .2)) {
-                    console.log(`Dispatching ${ creep.name } to Collect Energy`);
+                    console.log(`Worker[Dispatcher]: Dispatching ${ creep.name } to Collect Energy`);
                     creep.memory.role = C.COLLECT;
                 } else {
                     if(creep.room.energyAvailable < creep.room.energyCapacityAvailable) {
-                        console.log(`Dispatcher[Builder]: Dispatching ${ creep.name } to Recharge Spawners`);
+                        console.log(`Worker[Dispatcher]: Dispatching ${ creep.name } to Recharge Spawners`);
                         creep.memory.role = C.RECHARGE;
-                    } else if (upgraderCount < 3) {
-                        console.log(`Dispatcher[Builder]: Dispatching ${ creep.name } to Upgrade`);
+                    } else if (upgraderCount < C.CREEP_ROLE_COUNTS.UPGRADE) {
+                        console.log(`Worker[Dispatcher]: Dispatching ${ creep.name } to Upgrade`);
                         creep.memory.role = C.UPGRADE;
                     } else if(0 < Object.keys(creep.room.find(FIND_CONSTRUCTION_SITES)).length) {
-                        console.log(`Dispatcher[Builder]: Dispatching ${ creep.name } to Builder`);
+                        console.log(`Worker[Dispatcher]: Dispatching ${ creep.name } to Builder`);
                         creep.memory.role = C.BUILD;
                     } else {
-                        console.log(`Dispatcher[Builder]: Nothing to do so Dispatching ${ creep.name } to Upgrade`);
+                        console.log(`Worker[Dispatcher]: Nothing to do so Dispatching ${ creep.name } to Upgrade`);
                         creep.memory.role = C.UPGRADE;
                     }
                 }
