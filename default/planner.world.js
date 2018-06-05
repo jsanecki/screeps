@@ -14,7 +14,7 @@ var worldPlanner = {
     * @return {Sources}
     */
     sourcePlanning: function() {
-        return {};
+        Memory.world.sources = {};
     },
     /** Assigns a source in the world based on avaliablity
     * @return {SourceId}
@@ -22,15 +22,34 @@ var worldPlanner = {
     assignSource: function() {
         return 0;
     },
+    /** Detects Pivot Load Points Flags, so that creeps can be assigned to it to
+     * load enegry into a container.
+    */
+    detectPivots: function() {
+        if(!Memory.world.pivots) {
+          Memory.world.pivots = {};
+        }
+
+        let flags = _.filter(Game.flags, (flag) => flag.name.indexOf('pivot') >= 0);
+        let pivots = _.forEach(flags, function(flag) {
+            if(!Memory.world.pivots[flag.name]) {
+              Memory.world.pivots[flag.name] = {
+                'creep': null
+              };
+            }
+        });
+    },
     /** Update World View */
     update: function() {
         console.log("Planner[World]: Updating view of World")
-        let memory = { "status": "active" }
+        if(!Memory.world) {
+          Memory.world = { "status": "active" };
+        }
 
-        memory.soruces = this.sourcePlanning();
+        this.sourcePlanning();
+        this.detectPivots();
 
-        // Create a Memory structure for world planning
-        Memory.world = memory;
+
     }
 }
 
