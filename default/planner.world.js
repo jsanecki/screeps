@@ -30,14 +30,20 @@ var worldPlanner = {
           Memory.world.pivots = {};
         }
 
-        let flags = _.filter(Game.flags, (flag) => flag.name.indexOf('pivot') >= 0);
-        let pivots = _.forEach(flags, function(flag) {
-            if(!Memory.world.pivots[flag.name]) {
-              Memory.world.pivots[flag.name] = {
+        let flags = _.filter(Game.flags, (flag) => flag.name.indexOf('pivot') >= 0).map((flag) => flag.name);
+        _.forEach(flags, function(flag) {
+            if(!Memory.world.pivots[flag]) {
+              Memory.world.pivots[flag] = {
                 'creep': null
               };
             }
         });
+        _.forEach(Object.keys(Memory.world.pivots), function(flag) {
+            if(_.indexOf(flags, flag) == -1) {
+                delete Memory.world.pivots[flag];
+            }
+        });
+        
     },
     /** Update World View */
     update: function() {
