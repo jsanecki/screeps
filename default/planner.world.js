@@ -43,19 +43,31 @@ var worldPlanner = {
                 delete Memory.world.pivots[flag];
             }
         });
-        
+    },
+    checkPivotsAreInUse: function() {
+      pivotAvaliable = false;
+      _.forEach(Memory.world.pivots, function(pivot) {
+        if(null == pivot.creep) {
+          pivotAvaliable = true;
+        }
+      });
+      Memory.world.status['isPivotPointAvaliable'] = pivotAvaliable;
     },
     /** Update World View */
     update: function() {
-        console.log("Planner[World]: Updating view of World")
         if(!Memory.world) {
-          Memory.world = { "status": "active" };
+          Memory.world = { "status": {} };
         }
 
-        this.sourcePlanning();
-        this.detectPivots();
+        // Every 100 tick world Detections
+        if(Game.time % 100 == 0) {
+          console.log("Planner[World]: Updating view of World")
+          this.sourcePlanning();
+          this.detectPivots();
+        }
 
-
+        // Every tick Checks
+        this.checkPivotsAreInUse();
     }
 }
 

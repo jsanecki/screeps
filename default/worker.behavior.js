@@ -3,7 +3,7 @@ let roleUpgrader = require('role.upgrader');
 let roleBuilder = require('role.builder');
 let roleRecharge = require('role.recharger');
 //let roleRepair = require('role.repair');
-let roleTanker = require('role.tanker');
+let rolePivotCollector = require('worker.role.pivot_collector');
 let roleRenew = require('role.renew');
 let C = require('role.constants');
 
@@ -18,9 +18,11 @@ let C = require('role.constants');
  */
 var creepBehavior = {
     run: function() {
+        let towers = [];
+        towers.push(Game.getObjectById('5b1211ae3687ff15c7f90a6e'));
+        towers.push(Game.getObjectById('5b18d99396c64057ad0539b6'));
 
-        var tower = Game.getObjectById('5b1211ae3687ff15c7f90a6e');
-        if(tower) {
+        _.forEach(towers, function(tower) {
             var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: (structure) => structure.hits < structure.hitsMax && structure.hits < 250000
             });
@@ -32,7 +34,7 @@ var creepBehavior = {
             if(closestHostile) {
                 tower.attack(closestHostile);
             }
-        }
+        });
 
         let creeps = _.filter(Game.creeps, (creep) => (creep.memory.classifier === C.CLASSIFIER.WORKER || creep.memory.classifier === C.CLASSIFIER.SPECIALIST));
         for(var name in creeps) {
@@ -51,8 +53,8 @@ var creepBehavior = {
                 case C.UPGRADE:
                     roleUpgrader.run(creep);
                     break;
-                case C.TANK:
-                    roleTanker.run(creep);
+                case C.PIVOT_COLLECT:
+                    rolePivotCollector.run(creep);
                     break;
                 case C.RENEW:
                     roleRenew.run(creep);

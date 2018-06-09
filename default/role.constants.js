@@ -9,6 +9,7 @@ module.exports = Object.freeze({
     'UPGRADE': 'upgrader',
     'TANK': 'tanker',
     'RENEW': 'carousel',
+    'PIVOT_COLLECT':'pivot',
 
     'CLASSIFIER': {
         'WORKER': 'worker',

@@ -21,11 +21,8 @@ module.exports.loop = function () {
               console.log('Main: Clearing non-existing creep memory:', name);
           }
       }
-
-      planner_world.update();
     }
-
-    // For each Tick planning
+    planner_world.update();
     planner_creep.run();
 
     // worker logic

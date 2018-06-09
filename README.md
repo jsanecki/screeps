@@ -9,10 +9,10 @@ It is very random and very unplanned.
 # Work List
 
 Code Restructure
-  - [ ] Change construction of creeps to a Build Manager Module
+  - [X] Change construction of creeps to a Build Manager Module
   - [ ] Change Behavior of a creep to Behavior Module
   - [ ] Change overall strategies to a Strategies Module
-  - [ ] Create a World Planner Module
+  - [X] Create a World Planner Module
   - [ ] Change runners to explorer
   - [ ] Change invader to warrior
 
@@ -20,7 +20,7 @@ Logic Enhancements
   - [X] Add Renew self logic
   - [ ] Add Generation checks for what should be renewed (highest generation only?)
   - [ ] Add Repair decaying stuff logic
-  - [ ] Tower logic
+  - [ ] Tower logic needs work
 
 Problems to Fix
   - [X] Not adding Energy to Room Controller
